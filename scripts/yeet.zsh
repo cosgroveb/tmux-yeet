@@ -1,12 +1,11 @@
 #!/usr/bin/env zsh
 # tmux-yeet: Yeet (park) current pane
 
-set -e
-
 SCRIPT_DIR=${0:A:h}
 source "$SCRIPT_DIR/lib.zsh"
 
 main() {
+  emulate -L zsh
   local parking_session
   local yank_key
   parking_session=$(get_tmux_option @yeet-parking-session "yeet-parking")
@@ -29,7 +28,7 @@ main() {
   # Check if we're in the parking session (would swap with ourselves)
   local current_session
   current_session=$(tmux display -p '#{session_name}')
-  if [[ $current_session == $parking_session ]]; then
+  if [[ $current_session == "$parking_session" ]]; then
     display_message "Can't yeet from the parking session"
     return 1
   fi
@@ -45,6 +44,7 @@ main() {
   fi
 
   # Execute swap - if this fails, we stop here (no respawn)
+  # .0 is the first pane in the window (absolute index, ignores pane-base-index)
   if ! tmux swap-pane -t "${parking_session}:{start}.0"; then
     display_message "Swap failed - pane unchanged"
     return 1
@@ -57,7 +57,7 @@ main() {
   # Respawn the swapped-in pane (now in our position) as placeholder
   # Set pane title as marker, then display banner
   tmux select-pane -T "YEET_PLACEHOLDER"
-  tmux respawn-pane -k "$SCRIPT_DIR/placeholder.zsh ${(q)cmd} ${(q)yank_key}"
+  tmux respawn-pane -k "${(q)SCRIPT_DIR}/placeholder.zsh ${(q)cmd} ${(q)yank_key}"
 
   display_message "Yeeted $cmd to parking"
 }

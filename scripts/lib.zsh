@@ -41,15 +41,17 @@ has_parked_pane() {
 # Find the placeholder pane by searching for marker in pane title
 # Returns pane_id or empty string
 find_placeholder_pane() {
-  local pane_id
-  # We mark placeholder panes by setting their title to "YEET_PLACEHOLDER"
-  pane_id=$(tmux list-panes -a -F '#{pane_id} #{pane_title}' | while read -r id title; do
+  emulate -L zsh
+  local panes line id title
+  panes=$(tmux list-panes -a -F '#{pane_id} #{pane_title}' 2>/dev/null) || return
+  for line in ${(f)panes}; do
+    id=${line%% *}
+    title=${line#* }
     if [[ $title == "YEET_PLACEHOLDER" ]]; then
       print -r -- "$id"
-      break
+      return
     fi
-  done)
-  print -r -- "$pane_id"
+  done
 }
 
 # Check if a specific pane is a placeholder

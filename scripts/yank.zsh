@@ -1,12 +1,11 @@
 #!/usr/bin/env zsh
 # tmux-yeet: Yank (retrieve) parked pane
 
-set -e
-
 SCRIPT_DIR=${0:A:h}
 source "$SCRIPT_DIR/lib.zsh"
 
 main() {
+  emulate -L zsh
   local parking_session
   parking_session=$(get_tmux_option @yeet-parking-session "yeet-parking")
 
@@ -35,10 +34,12 @@ main() {
   fi
 
   # Get the command name for the success message
-  local cmd
-  cmd=$(tmux show-environment -g YEET_CMD 2>/dev/null | sed 's/^YEET_CMD=//')
+  local cmd raw
+  raw=$(tmux show-environment -g YEET_CMD 2>/dev/null)
+  cmd=${raw#YEET_CMD=}
 
   # Swap the parked pane back to where the placeholder is
+  # .0 is the first pane in the window (absolute index, ignores pane-base-index)
   if ! tmux swap-pane -s "${parking_session}:{start}.0" -t "$placeholder"; then
     display_message "Yank failed - swap error"
     return 1

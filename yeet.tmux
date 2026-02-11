@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # tmux-yeet TPM plugin entry point
 
-CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)" || exit 1
 
 get_tmux_option() {
   local option="$1"

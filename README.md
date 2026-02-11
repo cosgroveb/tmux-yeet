@@ -2,6 +2,8 @@
 
 Yeet a tmux pane to a parking session while preserving your layout. Yank it back when ready.
 
+**Requires:** tmux 3.0+ and zsh
+
 ## What it does
 
 When you "yeet" a pane:
@@ -61,7 +63,7 @@ set -g @yeet-parking-session 'yeet-parking'
 - **Visual placeholder**: ASCII art banner shows what's parked
 - **Global yank**: Retrieve your pane from anywhere, not just where you yeeted from
 - **Single pane limit**: Only one pane parked at a time (prevents confusion)
-- **lolcat support**: Rainbow banner if lolcat is installed (checks `/usr/games/lolcat` too)
+- **lolcat support**: Rainbow banner if lolcat is installed (checks PATH and `/usr/games/lolcat` for Debian)
 
 ## Edge cases handled
 
@@ -72,6 +74,8 @@ set -g @yeet-parking-session 'yeet-parking'
 | Yeet from parking session | Blocked with message "Can't yeet from the parking session" |
 | Yank with nothing parked | Message "Nothing parked" |
 | Placeholder killed externally | State cleaned up, message shown |
+| Placeholder exited (Ctrl-C) | State cleaned up on next yank |
+| Parking session killed | Yank shows "Nothing parked" |
 | Parking session missing | Created automatically on yeet |
 | lolcat not installed | Falls back to plain text |
 
@@ -82,11 +86,6 @@ The default `y` binding may conflict with copy-mode yank in some configurations.
 ```tmux
 set -g @yeet-key 'g'  # or another unused key
 ```
-
-## Requirements
-
-- tmux 3.0+
-- zsh (for the scripts)
 
 ## License
 

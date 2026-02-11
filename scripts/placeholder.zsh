@@ -6,13 +6,15 @@ SCRIPT_DIR=${0:A:h}
 source "$SCRIPT_DIR/lib.zsh"
 
 main() {
-  local cmd=$1
-  local yank_key=$2
+  emulate -L zsh
+  local cmd=${1:-unknown}
+  local yank_key=${2:-Y}
 
   clear
   render_yeet_banner "$cmd" "$yank_key"
 
-  # Block forever (placeholder stays until yanked)
+  # Block forever - stdin never closes, so cat waits indefinitely
+  # Pane stays alive until killed by yank or user
   cat
 }
 
