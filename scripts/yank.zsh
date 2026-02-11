@@ -39,7 +39,7 @@ main() {
   cmd=$(tmux show-environment -g YEET_CMD 2>/dev/null | sed 's/^YEET_CMD=//')
 
   # Swap the parked pane back to where the placeholder is
-  if ! tmux swap-pane -s "${parking_session}:0.0" -t "$placeholder"; then
+  if ! tmux swap-pane -s "${parking_session}:{start}.0" -t "$placeholder"; then
     display_message "Yank failed - swap error"
     return 1
   fi

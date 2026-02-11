@@ -45,7 +45,7 @@ main() {
   fi
 
   # Execute swap - if this fails, we stop here (no respawn)
-  if ! tmux swap-pane -t "${parking_session}:0.0"; then
+  if ! tmux swap-pane -t "${parking_session}:{start}.0"; then
     display_message "Swap failed - pane unchanged"
     return 1
   fi
