@@ -9,16 +9,18 @@ main() {
   local parking_session
   parking_session=$(get_tmux_option @yeet-parking-session "yeet-parking")
 
-  # Check if parking session exists
-  if ! parking_exists "$parking_session"; then
-    display_message "Nothing parked (no parking session)"
-    return 1
-  fi
-
-  # Check if something is actually parked
+  # Check if something is actually parked (env var)
   if ! has_parked_pane; then
     display_message "Nothing parked"
-    return 1
+    return 0
+  fi
+
+  # Check if parking session exists - clean up stale state if not
+  if ! parking_exists "$parking_session"; then
+    tmux set-environment -gu YEET_PARKED
+    tmux set-environment -gu YEET_CMD
+    display_message "Nothing parked (cleaned up stale state)"
+    return 0
   fi
 
   # Find the placeholder pane (could be anywhere)
@@ -30,7 +32,7 @@ main() {
     tmux set-environment -gu YEET_PARKED
     tmux set-environment -gu YEET_CMD
     display_message "Placeholder not found - state cleaned up"
-    return 1
+    return 0
   fi
 
   # Get the command name for the success message
@@ -42,7 +44,7 @@ main() {
   # .0 is the first pane in the window (absolute index, ignores pane-base-index)
   if ! tmux swap-pane -s "${parking_session}:{start}.0" -t "$placeholder"; then
     display_message "Yank failed - swap error"
-    return 1
+    return 0
   fi
 
   # Clean up environment variables

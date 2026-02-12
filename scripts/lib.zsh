@@ -12,8 +12,11 @@ get_tmux_option() {
 }
 
 # Display message in tmux status line
+# Usage: display_message "text" [duration_ms]
 display_message() {
-  tmux display-message "$1"
+  local msg=$1
+  local duration=${2:-2000}
+  tmux display-message -d "$duration" "$msg"
 }
 
 # Check if parking session exists
