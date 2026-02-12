@@ -1,19 +1,22 @@
 # tmux-yeet
+![yeet](https://github.com/user-attachments/assets/8fab8772-e95f-4878-9b3b-1b6167c8d65c)
 
-Yeet a tmux pane to a parking session while preserving your layout. Yank it back when ready.
+Claude Code flickers like a strobe light. Having it in peripheral vision while working another pane is somewhere between
+distracting and migraine-triggering.
 
-**Requires:** tmux 3.0+ and zsh
+tmux-yeet: park panes without destroying your layout. C-a y to yeet, C-a Y to yank it back.
 
 ## What it does
 
 When you "yeet" a pane:
-1. The pane swaps to a hidden parking session
-2. A placeholder with ASCII art takes its place (preserving layout)
-3. The placeholder shows what was yeeted and how to get it back
+1. The pane swaps to a hidden "parking" session
+2. A placeholder takes its place (preserving layout)
 
 When you "yank":
 1. The parked pane swaps back to where the placeholder is
 2. Works from any pane - finds the placeholder automatically
+
+This only yeets/yanks one thing at a time.
 
 ## Installation
 
@@ -56,28 +59,6 @@ set -g @yank-key 'Y'
 # Change parking session name (default shown)
 set -g @yeet-parking-session 'yeet-parking'
 ```
-
-## Features
-
-- **Layout preservation**: Uses swap-pane so your window layout stays intact
-- **Visual placeholder**: ASCII art banner shows what's parked
-- **Global yank**: Retrieve your pane from anywhere, not just where you yeeted from
-- **Single pane limit**: Only one pane parked at a time (prevents confusion)
-- **lolcat support**: Rainbow banner if lolcat is installed (checks PATH and `/usr/games/lolcat` for Debian)
-
-## Edge cases handled
-
-| Situation | Behavior |
-|-----------|----------|
-| Double yeet | Blocked with message "Already have a parked pane" |
-| Yeet the placeholder | Blocked with message "This is a placeholder pane" |
-| Yeet from parking session | Blocked with message "Can't yeet from the parking session" |
-| Yank with nothing parked | Message "Nothing parked" |
-| Placeholder killed externally | State cleaned up, message shown |
-| Placeholder exited (Ctrl-C) | State cleaned up on next yank |
-| Parking session killed | Yank shows "Nothing parked" |
-| Parking session missing | Created automatically on yeet |
-| lolcat not installed | Falls back to plain text |
 
 ## Potential conflicts
 
