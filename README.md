@@ -1,5 +1,4 @@
 # tmux-yeet
-<img src="https://github.com/user-attachments/assets/8fab8772-e95f-4878-9b3b-1b6167c8d65c" alt="yeet" width="600">
 
 Claude Code flickers like a strobe light. Having it in peripheral vision while working another pane is somewhere between
 distracting and migraine-triggering.
