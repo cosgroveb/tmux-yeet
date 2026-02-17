@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Shellcheck bash files
+        run: shellcheck yeet.tmux
+
+      - name: Syntax check zsh files
+        run: |
+          for f in scripts/*.zsh; do
+            echo "Checking $f"
+            zsh -n "$f"
+          done
+
+      - name: Verify lib functions exist
+        run: |
+          zsh -c 'source scripts/lib.zsh && \
+            typeset -f get_tmux_option display_message parking_exists \
+              ensure_parking has_parked_pane find_placeholder_pane \
+              is_placeholder_pane find_lolcat render_yeet_banner >/dev/null'
+
+  integration:
+    name: Integration Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y tmux zsh
+
+      - name: Run integration tests
+        run: ./test/integration.sh

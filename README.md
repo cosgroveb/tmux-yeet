@@ -1,4 +1,7 @@
 # tmux-yeet
+
+[![CI](https://github.com/cosgroveb/tmux-yeet/actions/workflows/ci.yml/badge.svg)](https://github.com/cosgroveb/tmux-yeet/actions/workflows/ci.yml)
+
 ![miren-quake-yeet-trimmed](https://github.com/user-attachments/assets/e16c58f8-492c-4be5-b4c0-b5a816bb1a86)
 
 Claude Code flickers like a strobe light. Having it in peripheral vision while working another pane is somewhere between
