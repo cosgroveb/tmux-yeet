@@ -47,6 +47,9 @@ main() {
     return 0
   fi
 
+  # Kill the placeholder (now in parking session) and clean up
+  tmux kill-pane -t "${parking_session}:{start}.0" 2>/dev/null
+
   # Clean up environment variables
   tmux set-environment -gu YEET_PARKED
   tmux set-environment -gu YEET_CMD
